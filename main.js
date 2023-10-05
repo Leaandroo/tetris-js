@@ -33,7 +33,7 @@ function crearTablero(width, height) {
 }
 //pieza jugador
 const jugador = {
-  position: { x: 6, y: 1 },
+  position: { x: 6, y: 0 },
   forma: [],
   color: [],
 };
@@ -157,6 +157,13 @@ if (/Mobi/.test(navigator.userAgent)) {
         lineaCompleta();
       }
     }
+    //Reiniciar partida en PC
+    if (event.key === "r") {
+      tablero.forEach((row) => row.fill(0));
+      jugador.position.x = 6;
+      jugador.position.y = 0;
+      jugador.forma = piezas[Math.floor(Math.random() * piezas.length)];
+    }
     //rotar piezas
     if (event.key === "ArrowUp") {
       const rotacion = [];
@@ -200,9 +207,10 @@ function agrupar() {
       }
     });
   });
+
   //Nueva pieza
   jugador.position.x = 6;
-  jugador.position.y = 1;
+  jugador.position.y = 0;
   jugador.forma = piezas[Math.floor(Math.random() * piezas.length)];
   //Juego terminado
   if (colision()) {
@@ -221,7 +229,7 @@ function lineaCompleta() {
   });
   eliminarLinea.forEach((y) => {
     tablero.splice(y, 1);
-    const nuevaLinea = Array(BOARD_HEIGHT).fill(0);
+    const nuevaLinea = Array(BOARD_WIDTH).fill(0);
     tablero.unshift(nuevaLinea);
     puntuacion += 10;
     document.querySelector("span").innerText = `Puntuación: ${puntuacion}`;
@@ -234,6 +242,8 @@ $section.addEventListener("click", () => {
   $section.remove();
   const audio = new Audio("./tetris.mp3");
   audio.volume = 0.5;
+  audio.loop = true;
+  //Activar/Desactivar Audio
   document.querySelector("img").addEventListener("click", () => {
     if (audio.volume > 0) {
       document.querySelector("img").src = `./sound-off.svg`;
