@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  '@vercel/analytics':
+    specifier: ^1.0.2
+    version: 1.0.2
+
 devDependencies:
   standard:
     specifier: ^17.1.0
