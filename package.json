@@ -12,9 +12,12 @@
     "standard": "^17.1.0",
     "vite": "^4.4.5"
   },
-  "eslintConfig":{
-    "extends":[
+  "eslintConfig": {
+    "extends": [
       "standard"
     ]
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.0.2"
   }
 }
