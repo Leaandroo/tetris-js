@@ -1,18 +1,29 @@
 import './style.css'
 import { BLOCK_SIZE, BOARD_HEIGHT, BOARD_WIDTH } from './consts'
 
-//1.Creación del canvas
+//Tamaño de pantalla
+const axisY = window.innerHeight
+const axisX = window.innerWidth
+
+const downScreen = (axisY * 70)/100
+const upScreen = (axisY * 20)/100
+const halfScreen = axisX / 2
+
+//Creación del canvas
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 
-//2. Parametros del canvas
+//Parametros del canvas
 canvas.width = BLOCK_SIZE * BOARD_WIDTH
 canvas.height = BLOCK_SIZE * BOARD_HEIGHT
 context.scale(BLOCK_SIZE, BLOCK_SIZE)
 
 let puntuacion = 0
+let dropTimer = 0
+let lastTime = 0
+let intevalo = 0
 
-//2. creación del tablero
+//creación del tablero
 const tablero = crearTablero(BOARD_WIDTH, BOARD_HEIGHT)
 function crearTablero (width, height) {
     return Array(height).fill().map(() => Array(width).fill(0))
@@ -48,8 +59,7 @@ const piezas = [
     ]
 ]
 
-let dropTimer = 0
-let lastTime = 0
+
 jugador.forma = piezas[Math.floor(Math.random()* piezas.length)] //<- Se define de forma random la pieza inicial
 
 function update(time = 0) {
@@ -57,7 +67,7 @@ function update(time = 0) {
     lastTime = time
     dropTimer += deltaTime
 
-    if (dropTimer > 1000){
+    /*if (dropTimer > 1000){
         jugador.position.y++
         dropTimer = 0
         if (colision()){
@@ -65,7 +75,7 @@ function update(time = 0) {
             agrupar()
             lineCompleta()
         }
-    }
+    }*/
     
     draw()
     window.requestAnimationFrame(update)
@@ -142,27 +152,56 @@ function draw(){
     }
 })*/
 document.ontouchstart = function(event) {
-    if (event.touches[0].clientX < window.innerWidth / 2) {
+    console.log(event.touches[0].clientX)
+    if (event.touches[0].clientX < halfScreen &&
+        event.touches[0].clientY < downScreen &&
+        event.touches[0].clientY > upScreen) {
       jugador.position.x--
       if (colision()){
         jugador.position.x++
       }
     }
-    if (event.touches[0].clientX > window.innerWidth / 2) {
+    if (event.touches[0].clientX > halfScreen &&
+        event.touches[0].clientY < downScreen &&
+        event.touches[0].clientY > upScreen) {
         jugador.position.x++
       if (colision()){
         jugador.position.x--
       }
     }
-    if (event.touches[0].clientY > window.innerHeight - 100) {
-        jugador.position.y++
-      if (colision()){
-        jugador.position.y--
-        agrupar()
-        lineCompleta()
-      }
+    if (event.touches[0].clientY > downScreen) {
+        intevalo = setInterval(()=>{
+            jugador.position.y++
+            if (colision()){
+                jugador.position.y--
+                agrupar()
+                lineCompleta()
+                clearInterval(intevalo)
+            }
+        },100)
+    }
+    //rotar piezas
+    if (event.touches[0].clientY < upScreen){
+        const rotacion = []
+     
+        for (let i = 0; i < jugador.forma[0].length; i++){
+            const row = []
+            for (let j = jugador.forma.length - 1; j >= 0; j--){
+                row.push(jugador.forma[j][i])
+            }
+            rotacion.push(row)
+        }
+
+        const formaPrevia = jugador.forma
+        jugador.forma = rotacion
+        if (colision()){
+            jugador.forma = formaPrevia
+        }
     }
   };
+  document.ontouchend = ((event)=>{
+    clearInterval(intevalo)
+  } )
 
 //colision de piezas
 function colision (){
