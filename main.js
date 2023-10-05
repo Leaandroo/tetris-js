@@ -258,12 +258,7 @@ function agrupar() {
     nombre = window.prompt("Ingresa tu nombre", nombre);
     window.alert(`Juego terminado ${nombre} tu puntuación es de: ${puntuacion}`);
     const writeData = async() =>{
-      const {data,error} = await supabase.from('scoreboard').insert([{nombre: nombre, score: puntuacion},]).select()
-      if (error) {
-        console.log(error)
-      } else {
-        console.log('bien')
-      }
+      const {} = await supabase.from('scoreboard').insert([{nombre: nombre, score: puntuacion},]).select()
     }
     writeData()
     nombre = null
