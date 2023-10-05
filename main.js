@@ -1,10 +1,12 @@
 import "./style.css";
 import { BLOCK_SIZE, BOARD_HEIGHT, BOARD_WIDTH, piezas } from "./consts";
 
+const $section = document.querySelector("section");
 //Tamaño de pantalla
 const axisY = window.innerHeight;
 const axisX = window.innerWidth;
 
+//Calculos para la pantalla
 const downScreen = (axisY * 70) / 100;
 const upScreen = (axisY * 20) / 100;
 const halfScreen = axisX / 2;
@@ -21,7 +23,6 @@ context.scale(BLOCK_SIZE, BLOCK_SIZE);
 let puntuacion = 0;
 let dropTimer = 0;
 let lastTime = 0;
-let intevalo = 0;
 
 //creación del tablero
 const tablero = crearTablero(BOARD_WIDTH, BOARD_HEIGHT);
@@ -44,15 +45,15 @@ function update(time = 0) {
   lastTime = time;
   dropTimer += deltaTime;
 
-  if (dropTimer > 1000){
-        jugador.position.y++
-        dropTimer = 0
-        if (colision()){
-            jugador.position.y--
-            agrupar()
-            lineCompleta()
-        }
+  if (dropTimer > 1000) {
+    jugador.position.y++;
+    dropTimer = 0;
+    if (colision()) {
+      jugador.position.y--;
+      agrupar();
+      lineaCompleta();
     }
+  }
 
   draw();
   window.requestAnimationFrame(update);
@@ -83,8 +84,9 @@ function draw() {
     });
   });
 }
-
+//Detectar PC o Celular
 if (/Mobi/.test(navigator.userAgent)) {
+  //Si es celular
   document.ontouchstart = function (event) {
     if (
       event.touches[0].clientX < halfScreen &&
@@ -111,7 +113,7 @@ if (/Mobi/.test(navigator.userAgent)) {
       if (colision()) {
         jugador.position.y--;
         agrupar();
-        lineCompleta();
+        lineaCompleta();
       }
     }
     //rotar piezas
@@ -125,7 +127,6 @@ if (/Mobi/.test(navigator.userAgent)) {
         }
         rotacion.push(row);
       }
-
       const formaPrevia = jugador.forma;
       jugador.forma = rotacion;
       if (colision()) {
@@ -134,6 +135,7 @@ if (/Mobi/.test(navigator.userAgent)) {
     }
   };
 } else {
+  //Si es PC
   document.addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft") {
       jugador.position.x--;
@@ -152,7 +154,7 @@ if (/Mobi/.test(navigator.userAgent)) {
       if (colision()) {
         jugador.position.y--;
         agrupar();
-        lineCompleta();
+        lineaCompleta();
       }
     }
     //rotar piezas
@@ -176,8 +178,6 @@ if (/Mobi/.test(navigator.userAgent)) {
     }
   });
 }
-//mover pieza
-/**/
 
 //colision de piezas
 function colision() {
@@ -212,7 +212,7 @@ function agrupar() {
 }
 
 //eliminar linea completa
-function lineCompleta() {
+function lineaCompleta() {
   const eliminarLinea = [];
   tablero.forEach((row, y) => {
     if (row.every((value) => value === 1)) {
@@ -228,4 +228,22 @@ function lineCompleta() {
   });
 }
 
-update();
+$section.addEventListener("click", () => {
+  update();
+  //Audio
+  $section.remove();
+  const audio = new Audio("./public/tetris.mp3");
+  audio.volume = 0.5;
+  document.querySelector("img").addEventListener("click", () => {
+    if (audio.volume > 0) {
+      document.querySelector("img").src = `./public/sound-off.svg`;
+      document.querySelector("img").alt = `Sonido Apagado`;
+      audio.volume = 0;
+    } else {
+      document.querySelector("img").src = `./public/sound-high.svg`;
+      document.querySelector("img").alt = `Sonido Encendido`;
+      audio.volume = 0.5;
+    }
+  });
+  audio.play();
+});
