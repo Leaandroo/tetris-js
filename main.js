@@ -1,7 +1,5 @@
 import "./style.css";
-import { BLOCK_SIZE, BOARD_HEIGHT, BOARD_WIDTH, piezas } from "./consts";
 
-const $section = document.querySelector("section");
 //Tamaño de pantalla
 const axisY = window.innerHeight;
 const axisX = window.innerWidth;
@@ -16,6 +14,9 @@ const canvas = document.querySelector("canvas");
 const context = canvas.getContext("2d");
 
 //Parametros del canvas
+const BLOCK_SIZE = 25; //tamaño de los pixeles
+const BOARD_WIDTH = 14; //Ancho del tablero
+const BOARD_HEIGHT = 30; //alto del tablero
 canvas.width = BLOCK_SIZE * BOARD_WIDTH;
 canvas.height = BLOCK_SIZE * BOARD_HEIGHT;
 context.scale(BLOCK_SIZE, BLOCK_SIZE);
@@ -37,6 +38,41 @@ const jugador = {
   forma: [],
   color: [],
 };
+//resto de piezas
+const piezas = [
+  [
+    [0, 1],
+    [0, 1],
+    [0, 1],
+    [0, 1],
+  ],
+  [
+    [0, 1],
+    [0, 1],
+    [1, 1],
+  ],
+  [
+    [1, 0],
+    [1, 0],
+    [1, 1],
+  ],
+  [
+    [1, 1],
+    [1, 1],
+  ],
+  [
+    [0, 1, 1],
+    [1, 1, 0],
+  ],
+  [
+    [1, 1, 0],
+    [0, 1, 1],
+  ],
+  [
+    [1, 1, 1],
+    [0, 1, 0],
+  ],
+];
 
 jugador.forma = piezas[Math.floor(Math.random() * piezas.length)]; //<- Se define de forma random la pieza inicial
 
@@ -235,6 +271,7 @@ function lineaCompleta() {
     document.querySelector("span").innerText = `Puntuación: ${puntuacion}`;
   });
 }
+const $section = document.querySelector("section");
 
 $section.addEventListener("click", () => {
   update();
