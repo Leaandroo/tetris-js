@@ -170,15 +170,12 @@ document.ontouchstart = function(event) {
       }
     }
     if (event.touches[0].clientY > downScreen) {
-        intevalo = setInterval(()=>{
-            jugador.position.y++
-            if (colision()){
-                jugador.position.y--
-                agrupar()
-                lineCompleta()
-                clearInterval(intevalo)
-            }
-        },100)
+        jugador.position.y++
+        if (colision()){
+            jugador.position.y--
+            agrupar()
+            lineCompleta()
+        }
     }
     //rotar piezas
     if (event.touches[0].clientY < upScreen){
@@ -199,9 +196,9 @@ document.ontouchstart = function(event) {
         }
     }
   };
-  document.ontouchend = ((event)=>{
+  document.ontouchend = function(event){
     clearInterval(intevalo)
-  } )
+  }
 
 //colision de piezas
 function colision (){
@@ -249,6 +246,7 @@ function lineCompleta() {
         tablero.unshift(nuevaLinea)
         puntuacion += 10
         document.querySelector('span').innerText = `Puntuación: ${puntuacion}`
+        console.log(puntuacion)
     })
 }
 
