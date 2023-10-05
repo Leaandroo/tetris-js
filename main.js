@@ -18,7 +18,7 @@ const canvas = document.querySelector("canvas");
 const context = canvas.getContext("2d");
 
 //Parametros del canvas
-const BLOCK_SIZE = 25; //tamaño de los pixeles
+const BLOCK_SIZE = 20; //tamaño de los pixeles
 const BOARD_WIDTH = 14; //Ancho del tablero
 const BOARD_HEIGHT = 30; //alto del tablero
 canvas.width = BLOCK_SIZE * BOARD_WIDTH;
@@ -257,6 +257,17 @@ function agrupar() {
   if (colision()) {
     nombre = window.prompt("Ingresa tu nombre", nombre);
     window.alert(`Juego terminado ${nombre} tu puntuación es de: ${puntuacion}`);
+    const writeData = async() =>{
+      const {data,error} = await supabase.from('scoreboard').insert([{nombre: nombre, score: puntuacion},]).select()
+      if (error) {
+        console.log(error)
+      } else {
+        console.log('bien')
+      }
+    }
+    writeData()
+    nombre = null
+    puntuacion = 0
     tablero.forEach((row) => row.fill(0));
   }
 }
