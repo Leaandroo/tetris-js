@@ -1,4 +1,8 @@
 import "./style.css";
+import { createClient } from "@supabase/supabase-js";
+import { supabaseUrl, supabaseKey } from "./database";
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 //Tamaño de pantalla
 const axisY = window.innerHeight;
@@ -24,6 +28,7 @@ context.scale(BLOCK_SIZE, BLOCK_SIZE);
 let puntuacion = 0;
 let dropTimer = 0;
 let lastTime = 0;
+let nombre;
 
 //creación del tablero
 const tablero = crearTablero(BOARD_WIDTH, BOARD_HEIGHT);
@@ -250,7 +255,8 @@ function agrupar() {
   jugador.forma = piezas[Math.floor(Math.random() * piezas.length)];
   //Juego terminado
   if (colision()) {
-    window.alert("Juego terminado");
+    nombre = window.prompt("Ingresa tu nombre");
+    window.alert(`Juego terminado ${nombre} tu puntuación es de: ${puntuacion}`);
     tablero.forEach((row) => row.fill(0));
   }
 }
