@@ -99,7 +99,7 @@ function draw(){
 }
 
 //mover pieza
-document.addEventListener('keydown', event => {
+/*document.addEventListener('keydown', event => {
     if (event.key === 'ArrowLeft') {
         jugador.position.x--
         if (colision()){
@@ -140,7 +140,29 @@ document.addEventListener('keydown', event => {
             jugador.forma = formaPrevia
         }
     }
-})
+})*/
+document.ontouchstart = function(event) {
+    if (event.touches[0].clientX < window.innerWidth / 2) {
+      jugador.position.x--
+      if (colision()){
+        jugador.position.x++
+      }
+    }
+    if (event.touches[0].clientX > window.innerWidth / 2) {
+        jugador.position.x++
+      if (colision()){
+        jugador.position.x--
+      }
+    }
+    if (event.touches[0].clientY > window.innerHeight - 100) {
+        jugador.position.y++
+      if (colision()){
+        jugador.position.y--
+        agrupar()
+        lineCompleta()
+      }
+    }
+  };
 
 //colision de piezas
 function colision (){
