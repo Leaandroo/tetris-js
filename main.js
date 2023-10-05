@@ -232,15 +232,15 @@ $section.addEventListener("click", () => {
   update();
   //Audio
   $section.remove();
-  const audio = new Audio("./public/tetris.mp3");
+  const audio = new Audio("./tetris.mp3");
   audio.volume = 0.5;
   document.querySelector("img").addEventListener("click", () => {
     if (audio.volume > 0) {
-      document.querySelector("img").src = `./public/sound-off.svg`;
+      document.querySelector("img").src = `./sound-off.svg`;
       document.querySelector("img").alt = `Sonido Apagado`;
       audio.volume = 0;
     } else {
-      document.querySelector("img").src = `./public/sound-high.svg`;
+      document.querySelector("img").src = `./sound-high.svg`;
       document.querySelector("img").alt = `Sonido Encendido`;
       audio.volume = 0.5;
     }
