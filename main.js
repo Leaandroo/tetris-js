@@ -255,7 +255,7 @@ function agrupar() {
   jugador.forma = piezas[Math.floor(Math.random() * piezas.length)];
   //Juego terminado
   if (colision()) {
-    nombre = window.prompt("Ingresa tu nombre");
+    nombre = window.prompt("Ingresa tu nombre", nombre);
     window.alert(`Juego terminado ${nombre} tu puntuación es de: ${puntuacion}`);
     tablero.forEach((row) => row.fill(0));
   }
